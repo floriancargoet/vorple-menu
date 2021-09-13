@@ -1,0 +1,27 @@
+/* Menu links look like text by default and look like links when .in-scope */
+
+.menu-link {
+  color: currentColor;
+  cursor: auto;
+  text-decoration: none;
+}
+.menu-link:hover {
+  color: currentColor;
+  cursor: auto;
+  text-decoration: none;
+}
+.in-scope {
+  color: #369;
+  cursor: pointer;
+}
+.in-scope:hover {
+  color: #33c;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Font Awesome icon color. */
+.context-menu-icon.context-menu-icon--fa5 i,
+.context-menu-icon.context-menu-icon--fa5 svg {
+  color: black;
+}

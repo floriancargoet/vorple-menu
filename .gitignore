@@ -1,0 +1,14 @@
+# Inform
+
+*.inform/Build/
+*.inform/Index/
+*.inform/Metadata.iFiction
+*.inform/Release.blurb
+*.inform/Skein.skein
+*.inform/manifest.plist
+*.inform/notes.rtf
+*.materials/Release/
+*.materials/Icon
+
+# Other
+.DS_Store
