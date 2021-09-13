@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
   // Wait for the dependencies (in particular contextMenu which we call immediately after).
-  await $.getScript("/jquery.contextMenu.min.js");
+  await $.getScript("./jquery.contextMenu.min.js");
   try {
     await $.getScript("https://kit.fontawesome.com/f6a35de753.js");
   } catch (e) {
