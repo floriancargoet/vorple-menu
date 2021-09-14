@@ -1,5 +1,18 @@
 // Wait for jquery (loaded by vorple after this script)
 document.addEventListener("DOMContentLoaded", async () => {
+  // low effort mobile detection
+  var isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+  // virtual keyboard detection
+  var hasVK = false;
+  window.addEventListener("resize", () => {
+    if (isMobile) {
+      hasVK = true;
+    }
+  });
+
   var menu = {};
   // Expose these to Vorple.
   window.resetMenu = function () {
@@ -49,6 +62,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         },
         items,
       };
+    },
+
+    events: {
+      show: function (opt) {
+        // refocus the input if a virtual keyboard was detected
+        if (hasVK) {
+          $("#lineinput-field").focus();
+        }
+      },
     },
   });
 });
