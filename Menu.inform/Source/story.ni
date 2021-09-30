@@ -34,22 +34,22 @@ A first menu rule for a thing (called t):
 
 A menu rule for an edible thing (called food):
 	add menu item "eat [the food]" with icon "fas fa-utensils" for food;
-	
+
 A menu rule for a wearable thing (called clothes):
 	if the player wears the clothes:
 		add menu item "take off [the clothes]" with icon "fas fa-tshirt" for clothes;
 	else:
 		add menu item "wear [the clothes]" with icon "fas fa-tshirt" for clothes;
-	
+
 A menu rule for a person (called p):
 	add menu item "talk to [the p]" for p;
-	
+
 A menu rule for a device (called d):
 	if d is switched on:
 		add menu item "switch off [the d]" for d;
 	else:
 		add menu item "switch on [the d]" for d;
-				
+
 A menu rule for an openable thing (called t):
 	if t is open:
 		add menu item "close [the t]" for t;
@@ -68,9 +68,23 @@ A menu rule for a door (called d):
 A menu rule for an enterable thing (called t):
 	add menu item "enter [the t]" for t;
 
+A menu rule for the water gun when the player carries the water gun:
+	repeat with person running through people in the location:
+		[ You can create sub-menus with the > symbol. ]
+		add menu item "shoot [the water gun] at > [person or myself]" for the water gun;
+
+To say (p - someone) or myself:
+	if p is the player:
+		say "myself";
+	else:
+		say p;
+
+A menu rule for the deep menu:
+	add menu item "sub 1 > sub 2 > sub 3 > so deep" for the deep menu with command "think";
+
 Section - Story
 
-[ 
+[
 
 Now, there are two ways to display a clickable object (a link which will open a menu when clicked):
 	- The simplest one is to say "blah blah [a thing] blah blah"
@@ -80,25 +94,37 @@ Now, there are two ways to display a clickable object (a link which will open a 
 
 #inform channel is a room. "The chat room where coders like to pretend they are writers. [menu for hlabrande]The boss, [hlabrande][/menu], is here, holding [a sign] which reads 'Can someone write me some Javascript?' He wears [a red hat].".
 
-hlabrande is a man in the #inform channel. 
+hlabrande is a man in the #inform channel.
 He carries a sign. The description of the sign is "It reads 'Can someone write me some Javascript?'".
 hlabrande wears a red hat.
 
-Understand "talk to [someone]" as talking to. 
+Understand "talk to [someone]" as talking to.
 Understand "talk to [something]" as talking to. Talking to is an action applying to one visible thing.
 
-Instead of talking to hlabrande: 
+Instead of talking to hlabrande:
 	say "You realize that he will probably ask you about this Java thing and you know nothing about it. Better ignore him.".
 
 A banana is in #inform channel. The description is "A banana, around one reddit banana tall.".
 It is edible.
 
-Instead of eating the banana: 
+Instead of eating the banana:
 	if hlabrande is in the location:
 		say "[hlabrande] shouts at you: 'Hey that's my banana!'[line break]You say: 'I'm keeping it safe for you' and you pocket it.";
 		now the player carries the banana;
 	else:
 		say "You try to peel it but you realize it's a plastic banana.";
+
+A water gun is in #inform.
+
+Shooting it at is an action applying to two things.
+Understand "shoot [something preferably held] at [someone]" as shooting it at.
+Report shooting it at:
+	if the second noun is the player:
+		say "Are you thirsty?";
+	else:
+		say "Pew! Pew! I mean, Splash!";
+
+The deep menu is in #inform.
 
 The steel door is a door.
 #inform channel is south of the steel door.

@@ -1,19 +1,19 @@
 // Wait for jquery (loaded by vorple after this script)
 document.addEventListener("DOMContentLoaded", async () => {
   // low effort mobile detection
-  var isMobile =
+  const isMobile =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     );
   // virtual keyboard detection
-  var hasVK = false;
+  let hasVK = false;
   window.addEventListener("resize", () => {
     if (isMobile) {
       hasVK = true;
     }
   });
 
-  var menu = {};
+  let menu = {};
   // Expose these to Vorple.
   window.resetMenu = function () {
     menu = {};
@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
   window.addToMenu = function (id, command, text, icon) {
     menu[id] = menu[id] || [];
+    if (command.includes(">")) {
+      command = command.replace(/\s*>\s*/g, " ");
+    }
     menu[id].push({ id, command, text, icon });
     $(`.object-id-${id}`).addClass("in-scope");
   };
@@ -38,6 +41,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     return match ? match[1] : null;
   }
 
+  function addItem(container, item) {
+    // Sub-menus
+    if (item.text.includes(">")) {
+      const [_, submenu, rest] = item.text.match(/([^>]+)>(.+)/);
+      // create submenu if it doesn't already exist
+      container[submenu] = container[submenu] ?? {
+        name: submenu,
+        items: {},
+      };
+      addItem(container[submenu].items, {
+        ...item,
+        text: rest,
+      });
+    } else {
+      container[item.command] = {
+        name: item.text,
+        icon: item.icon,
+      };
+    }
+  }
+
   $(document.body).contextMenu({
     // Only in scope objects have a menu.
     selector: ".menu-link.in-scope",
@@ -47,25 +71,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     build($el, ev) {
       // Get the object id.
       const id = getObjectID($el[0]);
-      // Build the items.
-      const items = {};
+      // Build the menus.
+      const root = {};
       for (const item of menu[id]) {
-        items[item.command] = {
-          name: item.text,
-          icon: item.icon,
-        };
+        addItem(root, item);
       }
       return {
         callback(key, options) {
           // Here key = command
           vorple.prompt.submit(key);
         },
-        items,
+        items: root,
       };
     },
 
     events: {
-      show: function (opt) {
+      show(opt) {
         // refocus the input if a virtual keyboard was detected
         if (hasVK) {
           $("#lineinput-field").focus();
